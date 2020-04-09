@@ -102,7 +102,7 @@ You should now be able to access any Azure Databricks clusters you create and up
 
 ## Download worker dependencies
 
-1. Microsoft.Spark.Worker helps Apache Spark execute your app, such as any user-defined functions (UDFs) you may have written. Download [Microsoft.Spark.Worker](https://github.com/dotnet/spark/releases/download/v0.6.0/Microsoft.Spark.Worker.netcoreapp2.1.linux-x64-0.6.0.tar.gz).
+1. Microsoft.Spark.Worker helps Apache Spark execute your app, such as any user-defined functions (UDFs) you may have written. Download [Microsoft.Spark.Worker](https://github.com/dotnet/spark/releases/download/v0.10.0/Microsoft.Spark.Worker.netcoreapp3.1.linux-x64-0.10.0.tar.gz).
 
 2. The *install-worker.sh* is a script that lets you copy .NET for Apache Spark dependent files into the nodes of your cluster.
 
@@ -112,7 +112,7 @@ You should now be able to access any Azure Databricks clusters you create and up
 
    Create a new file named **db-init.sh** on your local computer, and paste the [db-init.sh contents](https://github.com/dotnet/spark/blob/master/deployment/db-init.sh) located on GitHub.
 
-   In the file you just created, set the `DOTNET_SPARK_RELEASE` variable to `https://github.com/dotnet/spark/releases/download/v0.6.0/Microsoft.Spark.Worker.netcoreapp2.1.linux-x64-0.6.0.tar.gz`. Leave the rest of the *db-init.sh* file as-is.
+   In the file you just created, set the `DOTNET_SPARK_RELEASE` variable to `https://github.com/dotnet/spark/releases/download/v0.10.0/Microsoft.Spark.Worker.netcoreapp3.1.linux-x64-0.10.0.tar.gz`. Leave the rest of the *db-init.sh* file as-is.
 
 > [!Note]
 > If you are using Windows, verify that the line-endings in your *install-worker.sh* and *db-init.sh* scripts are Unix-style (LF). You can change line endings through text editors like Notepad++ and Atom.
@@ -125,14 +125,14 @@ Next, you publish the *mySparkApp* created in the [.NET for Apache Spark - Get S
 
    ```dotnetcli
    cd mySparkApp
-   dotnet publish -c Release -f netcoreapp3.0 -r ubuntu.16.04-x64
+   dotnet publish -c Release -f netcoreapp3.1 -r ubuntu.16.04-x64
    ```
 
 2. Do the following tasks to zip your published app files so that you can easily upload them to your Databricks Spark cluster.
 
    **On Windows:**
 
-   Navigate to mySparkApp/bin/Release/netcoreapp3.0/ubuntu.16.04-x64. Then, right-click on **Publish** folder and select **Send to > Compressed (zipped) folder**. Name the new folder **publish.zip**.
+   Navigate to mySparkApp/bin/Release/netcoreapp3.1/ubuntu.16.04-x64. Then, right-click on **Publish** folder and select **Send to > Compressed (zipped) folder**. Name the new folder **publish.zip**.
 
    **On Linux, run the following command:**
 
@@ -149,7 +149,7 @@ In this section, you upload several files to DBFS so that your cluster has every
    ```console
    databricks fs cp db-init.sh dbfs:/spark-dotnet/db-init.sh
    databricks fs cp install-worker.sh dbfs:/spark-dotnet/install-worker.sh
-   databricks fs cp Microsoft.Spark.Worker.netcoreapp2.1.linux-x64-0.6.0.tar.gz dbfs:/spark-dotnet/   Microsoft.Spark.Worker.netcoreapp2.1.linux-x64-0.6.0.tar.gz
+   databricks fs cp Microsoft.Spark.Worker.netcoreapp3.1.linux-x64-0.10.0.tar.gz dbfs:/spark-dotnet/   Microsoft.Spark.Worker.netcoreapp3.1.linux-x64-0.10.0.tar.gz
    ```
 
 2. Run the following commands to upload the remaining files your cluster will need to run your app: the zipped publish folder, *input.txt*, and *microsoft-spark-2.4.x-0.3.0.jar*.
@@ -160,7 +160,7 @@ In this section, you upload several files to DBFS so that your cluster has every
 
    cd mySparkApp\bin\Release\netcoreapp3.0\ubuntu.16.04-x64 directory
    databricks fs cp mySparkApp.zip dbfs:/spark-dotnet/publish.zip
-   databricks fs cp microsoft-spark-2.4.x-0.6.0.jar dbfs:/spark-dotnet/microsoft-spark-2.4.x-0.6.0.jar
+   databricks fs cp microsoft-spark-2.4.x-0.10.0.jar dbfs:/spark-dotnet/microsoft-spark-2.4.x-0.10.0.jar
    ```
 
 ## Create a job
@@ -178,7 +178,7 @@ Your app runs on Azure Databricks through a job that runs **spark-submit**, whic
 3. Paste the following parameters in the job configuration. Then, select **Confirm**.
 
    ```
-   ["--class","org.apache.spark.deploy.dotnet.DotnetRunner","/dbfs/spark-dotnet/microsoft-spark-2.4.x-0.6.0.jar","/dbfs/spark-dotnet/publish.zip","mySparkApp"]
+   ["--class","org.apache.spark.deploy.dotnet.DotnetRunner","/dbfs/spark-dotnet/microsoft-spark-2.4.x-0.10.0.jar","/dbfs/spark-dotnet/publish.zip","mySparkApp"]
    ```
 
 ## Create a cluster
